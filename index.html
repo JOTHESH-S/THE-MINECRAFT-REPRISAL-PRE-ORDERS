@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Minecraft Reprisal — Pre-Orders</title>
+<style>
+:root{
+  --bg:#0F172A; --card:#1E3A8A; --red:#b8860b; --red2:#8a6a1a; --text:#2b2410;
+  --blue-grad:linear-gradient(135deg,#ffffff 0%,#f4f1e6 35%,#e3dcc3 65%,#cfc6a4 100%);
+  --red-grad:linear-gradient(135deg,#fff3cf 0%,#f0ce72 22%,#c9a227 48%,#f6e3a0 62%,#8a6a1a 100%);
+  --muted:#7a6f4e;
+  color-scheme: light;
+}
+*{box-sizing:border-box;}
+body{margin:0;min-height:100vh;background:linear-gradient(135deg,#fffdf6 0%,#f2ecd8 45%,#e3d9b8 100%);color:var(--text);font-family:system-ui,Segoe UI,Roboto,sans-serif;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);-webkit-tap-highlight-color:transparent;}
+html{background:#e3d9b8;min-height:100%;}
+.wrap{max-width:900px;margin:0 auto;padding:16px;}
+.title-placeholder{max-width:600px;margin:18px auto 10px;min-height:110px;border:2px dashed rgba(138,106,26,.45);border-radius:16px;cursor:pointer;background-size:contain;background-position:center;background-repeat:no-repeat;transition:border-color .15s,transform .15s;overflow:hidden;}
+.title-placeholder:hover{border-color:rgba(138,106,26,.8);transform:translateY(-2px);}
+.title-banner{width:100%;max-width:700px;display:block;margin:18px auto 10px;border-radius:20px;box-shadow:0 10px 26px rgba(120,95,20,.3);}
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+.subtitle{text-align:center;color:var(--muted);margin-bottom:14px;font-size:14px;}
+.banner{background:var(--blue-grad);border:2px solid var(--red2);border-radius:16px;padding:14px;text-align:center;margin-bottom:18px;box-shadow:0 8px 18px rgba(120,95,20,.25);transition:transform .15s,box-shadow .15s;}
+.banner:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(120,95,20,.35);}
+.banner b{color:#8a6a1a;}
+.card{background:var(--blue-grad);border-radius:16px;padding:18px;margin-bottom:14px;border:1px solid rgba(138,106,26,.25);box-shadow:0 8px 18px rgba(120,95,20,.22);transition:transform .15s,box-shadow .15s;}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(120,95,20,.3);}
+input,select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid #cdbf8a;background:#fffdf5;color:#2b2410;margin-top:6px;font-size:15px;box-shadow:inset 0 2px 6px rgba(120,95,20,.1);}
+label{font-size:13px;color:var(--muted);}
+button{cursor:pointer;border:none;font-weight:700;}
+.btn-red{position:relative;overflow:hidden;background:var(--red-grad);color:#3b2b06;padding:12px 18px;border-radius:14px;width:100%;font-size:16px;box-shadow:0 6px 14px rgba(138,106,26,.45);transition:box-shadow .15s,transform .1s;}
+.btn-red::after{content:'';position:absolute;top:-60%;left:-60%;width:40%;height:220%;background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,.75) 50%,transparent 100%);transform:rotate(20deg);transition:left .5s;}
+.btn-red:hover::after{left:140%;}
+.btn-red:hover{background:var(--red-grad);box-shadow:0 10px 22px rgba(138,106,26,.6);transform:translateY(-2px);}
+.btn-red:active{background:var(--red-grad);box-shadow:0 4px 30px rgba(138,106,26,.8);transform:translateY(1px);}
+.btn-ghost{background:transparent;color:#8a6a1a;text-decoration:underline;font-size:13px;}
+.formats{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;}
+.fcard{background:linear-gradient(135deg,#ffffff 0%,#f3eccd 50%,#ddd0a0 100%);border:2px solid transparent;border-radius:16px;padding:12px;transition:transform .15s,box-shadow .15s;box-shadow:0 5px 12px rgba(120,95,20,.2);}
+.fcard:hover{transform:translateY(-3px);box-shadow:0 12px 24px rgba(120,95,20,.32);}
+.fcard:active{box-shadow:0 2px 22px rgba(120,95,20,.4);}
+.fcard.sel{border-color:var(--red2);box-shadow:0 0 0 2px var(--red2),0 6px 18px rgba(138,106,26,.35);}
+.fcard h4{margin:0 0 4px;color:#2b2410;}
+.fcard p{margin:0;font-size:12px;color:var(--muted);}
+.fcard .price{margin-top:6px;color:#8a6a1a;font-weight:700;}
+.seatgrid{display:flex;flex-direction:column;gap:5px;margin-top:10px;overflow-x:auto;padding-bottom:4px;align-items:center;}
+.seatrow{display:flex;gap:4px;align-items:center;min-width:max-content;}
+.rowlabel{width:16px;font-size:10px;color:var(--muted);flex-shrink:0;}
+.block{display:flex;gap:3px;}
+.curved-row .block{transition:none;}
+.aisle{width:12px;flex-shrink:0;}
+.seat{width:22px;height:22px;border-radius:6px;border:2px solid #3b82f6;font-size:7px;display:flex;align-items:center;justify-content:center;color:#2563eb;flex-shrink:0;background:#fff;-webkit-tap-highlight-color:transparent;user-select:none;}
+.seat.sofa{width:42px;height:30px;border-radius:15px;font-size:9px;}
+.seat.worst{border-color:#dc2626;color:#dc2626;}
+.seat.best{border-color:#b8860b;color:#8a6a1a;box-shadow:0 0 0 1px #b8860b inset;background:#fff8e4;}
+.seat.booked{border-color:#c9c2ac;color:#b5ae96;background:#efe9d6;text-decoration:line-through;cursor:not-allowed;}
+.seat.sel{background:#22c55e;color:#06220f;border-color:#22c55e;}
+.legend{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;font-size:11px;margin:6px 0;color:var(--muted);}
+.legend .lg{display:flex;align-items:center;gap:4px;}
+.legend .sw{width:13px;height:13px;border-radius:4px;border:2px solid;display:inline-block;}
+.legend .sw.normal{border-color:#3b82f6;} .legend .sw.worst{border-color:#dc2626;} .legend .sw.best{border-color:#b8860b;} .legend .sw.booked{border-color:#c9c2ac;background:#efe9d6;}
+.notice{background:#fdf2e0;border:1px solid #c0392b;border-radius:12px;padding:10px;font-size:13px;color:#7a1f1f;margin:12px 0;}
+.notice.ok{background:#f3fbe9;border-color:#4b7f1e;color:#2f5710;}
+.spinner{display:inline-block;width:12px;height:12px;border:2px solid #8a6a1a;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ticket{background:repeating-linear-gradient(135deg,#fffdf5,#fffdf5 10px,#f3e7bd 10px,#f3e7bd 20px);border-radius:16px;padding:18px;border:2px dashed #b8860b;}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;border-radius:12px;overflow:hidden;box-shadow:0 6px 16px rgba(120,95,20,.25);}
+th,td{border:1px solid #ddd0a0;padding:6px;text-align:left;}
+th{background:linear-gradient(135deg,#f0ce72,#c9a227);color:#3b2b06;}
+th:first-child{border-top-left-radius:12px;} th:last-child{border-top-right-radius:12px;}
+tr:last-child td:first-child{border-bottom-left-radius:12px;} tr:last-child td:last-child{border-bottom-right-radius:12px;}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--red);font-size:11px;color:#fff;}
+.center{text-align:center;}
+.check{font-size:60px;color:#22c55e;text-align:center;}
+.small{font-size:12px;color:var(--muted);}
+.ticket-pass{position:relative;max-width:420px;margin:30px auto;padding:24px;border-radius:24px;background:var(--blue-grad);border:3px solid #b8860b;box-shadow:0 14px 34px rgba(120,95,20,.3);color:#2b2410;}
+.ticket-pass::before,.ticket-pass::after{content:'';position:absolute;top:60%;width:26px;height:26px;background:#eee4c8;border-radius:50%;transform:translateY(-50%);}
+.ticket-pass::before{left:-14px;} .ticket-pass::after{right:-14px;}
+.tp-badge{display:inline-block;background:var(--red-grad);color:#3b2b06;padding:4px 14px;border-radius:999px;font-size:11px;font-weight:700;margin:0 auto 8px;display:table;}
+.tear-line{border-top:2px dashed rgba(138,106,26,.45);margin:14px -24px;}
+.tp-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(138,106,26,.35);font-size:14px;}
+.tp-row b{color:#8a6a1a;}
+.tp-barcode-wrap{height:50px;margin:16px 0;border-radius:8px;background:#fff8e4;padding:6px 10px;overflow:hidden;display:flex;align-items:stretch;justify-content:center;gap:2px;}
+.btn-tp{width:100%;padding:12px;border-radius:14px;background:var(--red-grad);color:#3b2b06;font-weight:700;border:none;margin-bottom:10px;box-shadow:0 6px 16px rgba(138,106,26,.45);}
+.btn-tp-ghost{width:100%;padding:10px;border-radius:14px;background:transparent;border:1px solid rgba(138,106,26,.5);color:#8a6a1a;}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+const FORMATS=[
+ {id:'2d',name:'2D',desc:'Standard Digital / Disc Format',inr:299,usd:5,seat:false},
+ {id:'3d',name:'3D',desc:'Stereoscopic 3D Format',inr:499,usd:8,seat:false},
+ {id:'emax2d',name:'E-MAX 2D',desc:'4:3 Giant-screen (IMAX-style)',inr:599,usd:10,seat:false},
+ {id:'emax3d',name:'E-MAX 3D',desc:'4:3 Giant-screen stereo (IMAX-style)',inr:699,usd:12,seat:false},
+ {id:'vr2d',name:'VR 2D',desc:'Virtual Reality 2D',inr:699,usd:12,seat:false},
+ {id:'vr3d',name:'VR 3D',desc:'Virtual Reality Stereo 3D',inr:799,usd:14,seat:false},
+ {id:'vrtheater',name:'VR Movie Theater',desc:'Immersive Virtual Auditorium',inr:899,usd:15,seat:true},
+ {id:'vr2d360',name:'VR 2D 360',desc:'Full 360° VR 2D',inr:899,usd:15,seat:false},
+ {id:'vr3d360',name:'VR 3D 360',desc:'Full 360° VR 3D',inr:999,usd:18,seat:false},
+ {id:'emax2dvr',name:'E-MAX 2D VR',desc:'IMAX Version VR',inr:599,usd:10,seat:true},
+ {id:'emax3dvr',name:'E-MAX 3D VR',desc:'IMAX Version VR',inr:699,usd:12,seat:true},
+];
+const ADMIN_PASSWORD="240175";
+const VIP_CAP=50;
+let DB=JSON.parse(localStorage.getItem('mcr_db')||'null')||{
+  formatPrices:{},
+  titleImage:null,
+  orders:[],
+  bookedSeats:[],
+  perks:['','','',''],
+  teaser:{title:'Early Exclusive Teaser — The Minecraft Saga',url:''}
+};
+const DEFAULT_TITLE_IMAGE='/_blob/5be5180f98a34ae426d89637c71cc3fc';
+const OLD_DEFAULT_TITLE_IMAGES=['/_blob/231a302d69559c88538e3ff73b80f037','/_blob/df7f3270415f885d4ed13eb6fda8bd5f'];
+function save(){localStorage.setItem('mcr_db',JSON.stringify(DB));}
+function esc(s){ if(s===undefined||s===null) return ''; return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+DB.formatPrices=DB.formatPrices||{};
+if(!DB.titleImage||OLD_DEFAULT_TITLE_IMAGES.includes(DB.titleImage)) DB.titleImage=DEFAULT_TITLE_IMAGE;
+DB.teaser=DB.teaser||{title:'',url:''};
+DB.perks=DB.perks||['','','',''];
+function handleTitleUpload(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(ev){ DB.titleImage=ev.target.result; S.adminDirty=true; render(); };
+  reader.readAsDataURL(file);
+}
+function setTitleFromUrl(){
+  const val=document.getElementById('titleUrlInput').value.trim();
+  if(!val) return;
+  DB.titleImage=val; S.adminDirty=true; render();
+}
+function getPrice(fmt){return DB.formatPrices[fmt.id]||{inr:fmt.inr,usd:fmt.usd};}
+function updatePrice(id,field,val){const f=FORMATS.find(x=>x.id===id);DB.formatPrices[id]=DB.formatPrices[id]||{...getPrice(f)};DB.formatPrices[id][field]=Number(val);S.adminDirty=true;render();}
+function saveAdminChanges(){ save(); S.adminDirty=false; render(); }
+let S={step:'otp',name:'',email:'',otpSent:null,otpInput:'',verified:false,format:null,seats:[],quantity:1,adminOpen:false,adminAuthed:false,adminDirty:false,lastOrder:null,showAdminModal:false,pwError:'',otpMsg:'',otpSending:false,otpError:'',resendCountdown:0};
+let countdownTimer=null;
+function startCountdown(){
+  S.resendCountdown=30;
+  updateCountdownUI();
+  if(countdownTimer) clearInterval(countdownTimer);
+  countdownTimer=setInterval(()=>{
+    S.resendCountdown--;
+    updateCountdownUI();
+    if(S.resendCountdown<=0){clearInterval(countdownTimer);countdownTimer=null;}
+  },1000);
+}
+function updateCountdownUI(){
+  const btn=document.getElementById('resendBtn');
+  if(!btn) return;
+  btn.disabled=S.resendCountdown>0;
+  btn.textContent=S.resendCountdown>0?('Resend OTP in '+S.resendCountdown+'s'):'Resend OTP';
+}
+
+function totalPrice(f){
+  if(!f) return {inr:0,usd:0};
+  const p=getPrice(f);
+  if(f.seat){
+    let inr=0,usd=0;
+    (S.seats||[]).forEach(s=>{ const adj=sectionAdjust(s.section); inr+=p.inr+adj.inr; usd+=p.usd+adj.usd; });
+    return {inr,usd};
+  }
+  return {inr:p.inr*S.quantity,usd:p.usd*S.quantity};
+}
+function money(f){ const t=totalPrice(f); return `₹${t.inr} / $${t.usd}`;}
+function sectionAdjust(sec){
+  if(sec==='front') return {inr:-100,usd:-2};
+  if(sec==='wing') return {inr:100,usd:2};
+  if(sec==='top') return {inr:200,usd:4};
+  if(sec==='back') return {inr:100,usd:2};
+  return {inr:0,usd:0};
+}
+function emaxRows(){
+  const rows=[];
+  rows.push({label:'A',blocks:[5,10,6],section:'front'});
+  rows.push({label:'B',blocks:[6,10,7],section:'front'});
+  rows.push({label:'C',blocks:[8,10,9],section:'front'});
+  ['D','E','F','G','H','I'].forEach(L=>rows.push({label:L,blocks:[24],section:'middle'}));
+  ['J','K','L','M'].forEach(L=>rows.push({label:L,blocks:[3,24,3],section:'wing'}));
+  rows.push({label:'N',blocks:[16],section:'top'});
+  return rows;
+}
+function vrtRows(){
+  const letters=['A','B','C','D','E','F','G','H','I'];
+  return letters.map((L,idx)=>({label:L,blocks:[20],section: idx<3?'front':(idx<6?'middle':'back')}));
+}
+function renderTheaterSeats(){
+  const prefix = S.format.id==='vrtheater' ? 'VRT' : 'EMAX';
+  const rows = S.format.id==='vrtheater' ? vrtRows() : emaxRows();
+  const rowsHtml = rows.map(r=>{
+    let seatNum=0;
+    const isSofa = r.section==='top';
+    const blocksHtml = r.blocks.map((count)=>{
+      let seats='';
+      for(let i=0;i<count;i++){
+        seatNum++;
+        const id=`${prefix}-${r.label}${seatNum}`;
+        const booked=DB.bookedSeats.includes(id);
+        const selIdx=(S.seats||[]).findIndex(s=>s.id===id);
+        const sel=selIdx>=0;
+        const vis = r.section==='middle' ? '' : (r.section==='front' ? '' : 'best');
+        seats+=`<div class="seat ${isSofa?'sofa':''} ${booked?'booked':''} ${sel?'sel':''} ${booked?'':vis}" title="${id}" onclick="${booked?'':`pickSeat('${id}','${r.section}')`}">${r.label}${seatNum}</div>`;
+      }
+      return `<div class="block">${seats}</div>`;
+    }).join('<div class="aisle"></div>');
+    const extraGap = (r.label==='D'||r.label==='J'||r.label==='N') ? 'margin-top:20px;' : '';
+    return `<div class="seatrow" style="${extraGap}"><span class="rowlabel">${r.label}</span>${blocksHtml}</div>`;
+  }).join('');
+  return `<div class="center small">↑ SCREEN THIS WAY ↑</div>
+  <div class="legend">
+    <span class="lg"><i class="sw normal"></i>Normal</span>
+    <span class="lg"><i class="sw best"></i>Best View</span>
+    <span class="lg"><i class="sw booked"></i>Booked</span>
+  </div>
+  <div class="seatgrid">${rowsHtml}</div>`;
+}
+let lastAnimKey=null;
+function render(){
+  const app=document.getElementById('app');
+  const key = S.viewTicket?'ticket':(S.adminOpen?'admin':S.step);
+  const isNewScreen = key!==lastAnimKey;
+  lastAnimKey=key;
+  if(S.viewTicket){ app.innerHTML=renderTicketPass(); if(isNewScreen) initFadeUp(); return; }
+  if(S.adminOpen){ app.innerHTML=renderAdmin()+(S.showAdminModal?renderAdminModal():''); if(isNewScreen) initFadeUp(); return; }
+  const remaining=Math.max(0,VIP_CAP-DB.orders.filter(o=>o.status==='VIP').length);
+  let html=`
+  <img class="title-banner" src="${esc(DB.titleImage)}" alt="The Minecraft Reprisal">
+  <div class="subtitle">Pre-Order Portal — Priority VIP Seating</div>
+  <div class="banner">
+    ${remaining>0 ? `<b>${remaining}</b> of ${VIP_CAP} Priority VIP Seats remaining` : `VIP seats full — you'll join the <b>500-Person Waitlist</b>`}
+  </div>`;
+
+  if(S.step==='otp') html+=renderOtp();
+  else if(S.step==='format') html+=renderFormat();
+  else if(S.step==='confirm') html+=renderConfirm();
+
+  html+=`<div class="center" style="margin-top:10px;"><button class="btn-ghost" onclick="openAdmin()">Are you the admin? Click here</button></div>`;
+  if(S.showAdminModal) html+=renderAdminModal();
+  app.innerHTML=html;
+  if(isNewScreen) initFadeUp();
+}
+function initFadeUp(){
+  const els=document.querySelectorAll('.card,.banner,.fcard,.ticket,.ticket-pass');
+  if(!window._io){
+    window._io=new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('visible'); window._io.unobserve(en.target); } });
+    },{threshold:0.1});
+  }
+  els.forEach(el=>{ el.classList.add('fade-up'); window._io.observe(el); });
+}
+
+function renderOtp(){
+  return `<div class="card">
+    <h3>Step 1 — Verify Your Email</h3>
+    <label>Full Name</label>
+    <input id="nameInput" value="${S.name}" oninput="S.name=this.value">
+    <label>Email Address</label>
+    <input id="emailInput" value="${S.email}" oninput="S.email=this.value">
+    ${S.otpMsg ? `<div class="notice">${S.otpMsg}</div>` : ''}
+    ${S.otpError ? `<div class="notice">${S.otpError}</div>` : ''}
+    ${!S.otpSent && !S.otpSending ? `<button class="btn-red" style="margin-top:12px" onclick="sendOtp()">Send Email OTP</button>` : ''}
+    ${S.otpSending ? `<button class="btn-red" style="margin-top:12px;opacity:.7;" disabled><span class="spinner"></span>Sending OTP...</button>` : ''}
+    ${S.otpSent ? `
+      <div class="notice ok">OTP sent to ${S.email}. Check your inbox (and spam folder).</div>
+      <label>Enter 6-digit OTP</label>
+      <input id="otpInput" maxlength="6" value="${S.otpInput}" oninput="S.otpInput=this.value">
+      <button class="btn-red" style="margin-top:12px" onclick="verifyOtp()">Verify &amp; Continue</button>
+      <button class="btn-ghost" id="resendBtn" style="margin-top:10px;display:block;" ${S.resendCountdown>0?'disabled':''} onclick="sendOtp()">${S.resendCountdown>0?'Resend OTP in '+S.resendCountdown+'s':'Resend OTP'}</button>
+    ` : ''}
+  </div>`;
+}
+async function sendOtp(){
+  if(!S.name||!S.email){S.otpMsg='Enter name and email first.';render();return;}
+  S.otpMsg='';S.otpError='';
+  const otp=String(Math.floor(100000+Math.random()*900000));
+  S.otpSending=true;S.otpSent=null;
+  render();
+  try{
+    const res=await fetch('https://api.emailjs.com/api/v1.0/email/send',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        service_id:'service_wivpzgd',
+        template_id:'template_26nkpjn',
+        user_id:'E0n8pg-IClR_wOO5q',
+        template_params:{
+          email:S.email,
+          passcode:otp,
+          time:new Date(Date.now()+15*60000).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})
+        }
+      })
+    });
+    if(!res.ok) throw new Error('status '+res.status);
+    S.otpSending=false;S.otpSent=otp;
+    startCountdown();
+    render();
+  }catch(err){
+    S.otpSending=false;S.otpSent=null;
+    S.otpError='Could not send the OTP email ('+err.message+'). Please try again.';
+    render();
+  }
+}
+function verifyOtp(){
+  if(S.otpInput===S.otpSent){S.step='format';persistLogin();render();}
+  else {S.otpMsg='Incorrect OTP — please try again.';render();}
+}
+
+function renderFormat(){
+  let cards=FORMATS.map(f=>`
+    <div class="fcard ${S.format&&S.format.id===f.id?'sel':''}" onclick="pickFormat('${f.id}')">
+      <h4>${f.name}</h4><p>${f.desc}</p>
+      <div class="price">₹${getPrice(f).inr} / $${getPrice(f).usd}</div>
+    </div>`).join('');
+  let seatBlock='';
+  if(S.format && S.format.seat){
+    seatBlock=`<div class="card"><h3>${S.format.name} Auditorium — Select Your Seat${S.quantity>1?'s':''}</h3>${renderTheaterSeats()}
+      <div class="small center" style="margin-top:8px;">${(S.seats||[]).length} of ${S.quantity} seat(s) selected</div>
+    </div>`;
+  }
+  return `<div class="card">
+    <h3>Step 2 — Choose Your Format</h3>
+    <div class="small" style="margin-bottom:12px;">Welcome to The Minecraft Reprisal Pre-Order App! Pick a viewing format below. For E-MAX and VR Theater experiences you'll also pick your seat(s) — pricing shifts a little depending on where you sit. You can pre-order up to 4 tickets per person.</div>
+    <div class="small center">Logged in as ${esc(S.email)} — <a href="#" style="color:#8a6a1a" onclick="logout();return false;">Not you? Log out</a></div>
+    <label>Number of Tickets</label>
+    <select onchange="setQuantity(this.value)">
+      ${[1,2,3,4].map(n=>`<option value="${n}" ${S.quantity===n?'selected':''}>${n}</option>`).join('')}
+    </select>
+    <div class="formats" style="margin-top:12px;">${cards}</div>
+  </div>
+  ${seatBlock}
+  <div class="notice">
+    No payment required today. Final prices will be confirmed in July 2027, when you will complete your payment.<br>
+    You can cancel your pre-order anytime if you don't like the final confirmed prices.
+  </div>
+  ${S.format ? `<div class="card center"><b>Total Estimated Price (${S.quantity} ticket${S.quantity>1?'s':''}):</b> ${money(S.format)}</div>` : ''}
+  <button class="btn-red" ${!S.format||(S.format.seat&&(S.seats||[]).length!==S.quantity)?'disabled style="opacity:.5"':''} onclick="confirmOrder()">Confirm Pre-Order</button>`;
+}
+function setQuantity(v){ S.quantity=Number(v); S.seats=(S.seats||[]).slice(0,S.quantity); render(); }
+function pickFormat(id){S.format=FORMATS.find(f=>f.id===id);S.seats=[];render();}
+function pickSeat(id,section){
+  S.seats=S.seats||[];
+  const idx=S.seats.findIndex(s=>s.id===id);
+  if(idx>=0){ S.seats.splice(idx,1); }
+  else{ if(S.seats.length>=S.quantity) return; S.seats.push({id,section}); }
+  render();
+}
+function persistLogin(){ try{ localStorage.setItem('mcr_user',JSON.stringify({name:S.name,email:S.email})); }catch(e){} }
+function logout(){ try{ localStorage.removeItem('mcr_user'); }catch(e){} S.name='';S.email='';S.otpSent=null;S.otpInput='';S.step='otp';render(); }
+async function confirmOrder(){
+  const isVip=DB.orders.filter(o=>o.status==='VIP').length<VIP_CAP;
+  const t=totalPrice(S.format);
+  const seatList=(S.seats||[]).map(s=>s.id).join(', ');
+  const order={id:Date.now(),name:S.name,email:S.email,format:S.format.name,
+    seat:seatList||'-',quantity:S.quantity,status:isVip?'VIP':'Waitlist',price:t.inr};
+  order.ticketUrl=window.location.origin+window.location.pathname+"?viewTicket=1&id="+encodeURIComponent(order.id)+"&name="+encodeURIComponent(order.name)+"&format="+encodeURIComponent(order.format)+"&seat="+encodeURIComponent(order.seat||"General")+"&price="+encodeURIComponent(order.price);
+  (S.seats||[]).forEach(s=>DB.bookedSeats.push(s.id));
+  DB.orders.push(order);
+  save();
+  S.lastOrder=order;
+  S.step='confirm';
+  render();
+  const ticketUrl=order.ticketUrl;
+  try{
+    await fetch('https://api.emailjs.com/api/v1.0/email/send',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        service_id:'service_wivpzgd',
+        template_id:'template_68f48fe',
+        user_id:'E0n8pg-IClR_wOO5q',
+        template_params:{
+          email:order.email,
+          user_name:order.name,
+          ticket_id:order.id,
+          format_name:order.format,
+          seat_number:order.seat&&order.seat!=='-'?order.seat:'General Admission',
+          est_price:order.price,
+          ticket_link:ticketUrl
+        }
+      })
+    });
+  }catch(err){ /* confirmation email failed silently; pre-order itself still stands */ }
+}
+
+function renderConfirm(){
+  const o=S.lastOrder;
+  return `<div class="check">✓</div>
+  <h2 class="center">Thank You! Your Pre-Order is Reserved!</h2>
+  <div class="ticket">
+    <div><b>${o.status==='VIP'?'VIP Seat':'Waitlist'} #:</b> ${o.id.toString().slice(-5)}</div>
+    <div><b>Name:</b> ${o.name}</div>
+    <div><b>Email:</b> ${o.email}</div>
+    <div><b>Format:</b> ${o.format}</div>
+    <div><b>Seat:</b> ${o.seat}</div>
+    <div><b>Estimated Price:</b> ₹${o.price}</div>
+  </div>
+  <div class="notice">Final prices confirmed in July 2027. You can cancel anytime before then.</div>
+  <button class="btn-red" onclick="viewMyTicketById(${o.id})">View My Ticket</button>
+  <button class="btn-red" style="margin-top:10px" onclick="cancelOrder(${o.id})">Cancel My Pre-Order</button>
+  <div class="card" style="margin-top:14px;">
+    <h4 style="margin-top:0;">Shareable Ticket Link</h4>
+    <div style="display:flex;gap:6px;margin-top:4px;">
+      <input id="ticketLinkDisplay" readonly value="${esc(o.ticketUrl)}" style="flex:1;font-size:11px;margin-top:0;">
+      <button class="btn-ghost" onclick="copyTicketLink()">Copy</button>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px;">
+    <h3>Your Exclusive Pre-Order Perks</h3>
+    <b>Early Exclusive Teaser — The Minecraft Saga</b>
+    <div>${esc(DB.teaser.title)}${DB.teaser.url?` — <a style="color:#8a6a1a" href="${esc(DB.teaser.url)}">link</a>`:' — (link coming soon)'}</div>
+    ${DB.perks.map((p,i)=>`<div>• ${esc(p)||'[ENTER PERK '+(i+1)+' HERE]'}</div>`).join('')}
+  </div>`;
+}
+function copyTicketLink(){
+  const el=document.getElementById('ticketLinkDisplay');
+  if(!el) return;
+  el.select(); el.setSelectionRange(0,99999);
+  try{ navigator.clipboard.writeText(el.value); }catch(e){ try{ document.execCommand('copy'); }catch(e2){} }
+}
+function viewMyTicketById(id){
+  const o=DB.orders.find(x=>x.id===id); if(!o) return;
+  S.viewTicket={id:o.id,name:o.name,format:o.format,seat:o.seat&&o.seat!=='-'?o.seat:'General',price:o.price,fromApp:true};
+  render();
+}
+function cancelOrder(id){
+  DB.orders=DB.orders.filter(o=>o.id!==id);
+  if(S.lastOrder&&S.lastOrder.seat!=='-') DB.bookedSeats=DB.bookedSeats.filter(s=>s!==S.lastOrder.seat);
+  save();
+  S={step:'otp',name:'',email:'',otpSent:null,otpInput:'',verified:false,format:null,seat:null,adminOpen:false,adminAuthed:false,lastOrder:null};
+  render();
+}
+
+function openAdmin(){
+  S.showAdminModal=true;S.pwError='';render();
+  setTimeout(()=>{const el=document.getElementById('adminPwInput'); if(el) el.focus();},50);
+}
+function submitAdminPw(){
+  const val=document.getElementById('adminPwInput').value;
+  if(val===ADMIN_PASSWORD){S.showAdminModal=false;S.adminOpen=true;S.adminAuthed=true;S.pwError='';}
+  else {S.pwError='Incorrect password.';}
+  render();
+}
+function closeAdminModal(){S.showAdminModal=false;S.pwError='';render();}
+function renderAdminModal(){
+  return `<div style="position:fixed;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;" onclick="if(event.target===this)closeAdminModal()">
+    <div class="card" style="max-width:320px;width:100%;">
+      <h3>Admin Login</h3>
+      <label>Password</label>
+      <input id="adminPwInput" type="password" onkeydown="if(event.key==='Enter')submitAdminPw()">
+      ${S.pwError?`<div class="notice">${S.pwError}</div>`:''}
+      <button class="btn-red" style="margin-top:12px" onclick="submitAdminPw()">Enter</button>
+      <button class="btn-ghost" style="margin-top:8px" onclick="closeAdminModal()">Cancel</button>
+    </div>
+  </div>`;
+}
+function renderAdmin(){
+  let rows=DB.orders.map(o=>`<tr>
+    <td>${esc(o.name)}</td>
+    <td>${esc(o.email)}</td>
+    <td>${esc(o.format)}</td>
+    <td>${esc(o.seat)}</td>
+    <td>${esc(o.status)}</td>
+    <td>₹${esc(o.price)}</td>
+    <td><button class="btn-ghost" onclick="deleteOrder(${o.id})">Delete</button></td>
+  </tr>`).join('');
+  return `<div class="card">
+    <h3>Admin Panel</h3>
+    ${S.adminDirty?`<button class="btn-red" onclick="saveAdminChanges()">💾 Click to Save Changes</button>`:''}
+    <h4>Title Image</h4>
+    <input type="file" accept="image/*" onchange="handleTitleUpload(event)">
+    <div class="small" style="margin:8px 0 4px;">If the file picker doesn't open (common inside embedded app viewers), paste a direct image URL instead:</div>
+    <div style="display:flex;gap:6px;">
+      <input id="titleUrlInput" placeholder="https://example.com/title.png" style="flex:1;margin-top:0;">
+      <button class="btn-ghost" onclick="setTitleFromUrl()">Set</button>
+    </div>
+    ${DB.titleImage?`<div style="margin-top:8px;"><img src="${DB.titleImage}" style="max-width:220px;border-radius:8px;display:block;"><button class="btn-ghost" style="margin-top:6px;" onclick="DB.titleImage=null;S.adminDirty=true;render();">Remove Title Image</button></div>`:''}
+    <div class="small" style="margin-top:10px;">Total pre-orders: ${DB.orders.length} (read-only — customer details cannot be edited, only removed)</div>
+    ${DB.orders.length===0?'<div class="small" style="margin:6px 0;">No pre-orders yet.</div>':''}
+    <div style="overflow-x:auto;"><table><tr><th>Name</th><th>Email</th><th>Format</th><th>Seat</th><th>Status</th><th>Price</th><th></th></tr>${rows}</table></div>
+    <h4 style="margin-top:14px;">Edit Ticket Prices</h4>
+    ${FORMATS.map(f=>{const p=getPrice(f);return `<div style="display:flex;gap:6px;align-items:center;margin-bottom:4px;"><span style="width:110px;font-size:12px;">${f.name}</span><input style="width:70px" type="number" value="${p.inr}" onchange="updatePrice('${f.id}','inr',this.value)"><input style="width:60px" type="number" value="${p.usd}" onchange="updatePrice('${f.id}','usd',this.value)"></div>`;}).join('')}
+    <h4 style="margin-top:14px;">Edit Perks (1–4)</h4>
+    ${DB.perks.map((p,i)=>`<input value="${esc(p)}" placeholder="Perk ${i+1}" onchange="DB.perks[${i}]=this.value;S.adminDirty=true;render();">`).join('')}
+    <h4 style="margin-top:14px;">Edit Teaser Title / URL</h4>
+    <input value="${esc(DB.teaser.title)}" onchange="DB.teaser.title=this.value;S.adminDirty=true;render();">
+    <input value="${esc(DB.teaser.url)}" placeholder="URL" onchange="DB.teaser.url=this.value;S.adminDirty=true;render();">
+    <div class="center" style="margin-top:14px;">
+      <button class="btn-ghost" onclick="DB.orders=[];DB.bookedSeats=[];save();render();">Clear All Pre-Orders</button><br>
+      <button class="btn-ghost" style="margin-top:10px" onclick="S.adminOpen=false;render();">Close Admin Panel</button>
+    </div>
+  </div>`;
+}
+function editOrder(id,field,val){
+  const o=DB.orders.find(x=>x.id===id); if(!o) return;
+  o[field]= field==='price'?Number(val):val; save(); render();
+}
+function deleteOrder(id){
+  const o=DB.orders.find(x=>x.id===id);
+  if(o && o.seat!=='-') DB.bookedSeats=DB.bookedSeats.filter(s=>s!==o.seat);
+  DB.orders=DB.orders.filter(x=>x.id!==id); save(); render();
+}
+function seededRandom(seed){ const x=Math.sin(seed)*10000; return x-Math.floor(x); }
+function barcodeWidths(seedStr,count){
+  let seed=0; const s=String(seedStr);
+  for(let i=0;i<s.length;i++) seed+=s.charCodeAt(i)*(i+7);
+  const widths=[];
+  for(let i=0;i<count;i++){
+    const r=seededRandom(seed+i*3.7);
+    widths.push(r>0.75?5:(r>0.45?3:1));
+  }
+  return widths;
+}
+function renderTicketPass(){
+  const t=S.viewTicket;
+  const barsHtml=barcodeWidths(t.id,50).map(w=>`<div style="width:${w}px;background:#2b2410;flex-shrink:0;"></div>`).join('');
+  return `<div class="ticket-pass">
+    <div class="tp-badge">🏆 VIP PASS</div>
+    <h2 style="text-align:center;margin-top:0;">🎫 Digital Ticket</h2>
+    <div class="tp-row"><span>Ticket ID</span><b>${esc(t.id)}</b></div>
+    <div class="tp-row"><span>Name</span><b>${esc(t.name)}</b></div>
+    <div class="tp-row"><span>Format</span><b>${esc(t.format)}</b></div>
+    <div class="tp-row"><span>Seat</span><b>${esc(t.seat)}</b></div>
+    <div class="tp-row"><span>Estimated Price</span><b>₹${esc(t.price)}</b></div>
+    <div class="tear-line"></div>
+    <div class="tp-barcode-wrap">${barsHtml}</div>
+    <div class="small center" style="margin:4px 0 14px;">Present this ticket at the venue</div>
+    <button class="btn-tp" onclick="downloadTicketImage()">Download Ticket Image</button>
+    <button class="btn-tp-ghost" onclick="if(S.viewTicket&&S.viewTicket.fromApp){S.viewTicket=null;render();}else{S.viewTicket=null;history.replaceState({},'',window.location.pathname);render();}">Back to Pre-Orders</button>
+  </div>`;
+}
+function roundRectPath(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+async function downloadTicketImage(){
+  const t=S.viewTicket;
+  const W=900,H=1000;
+  const canvas=document.createElement('canvas');
+  canvas.width=W;canvas.height=H;
+  const ctx=canvas.getContext('2d');
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#fffdf6');bg.addColorStop(0.45,'#f2ecd8');bg.addColorStop(1,'#e3d9b8');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  const cx=50,cy=50,cw=W-100,ch=H-100,cr=36;
+  const cardGrad=ctx.createLinearGradient(cx,cy,cx+cw,cy+ch);
+  cardGrad.addColorStop(0,'#ffffff');cardGrad.addColorStop(0.35,'#f4f1e6');cardGrad.addColorStop(0.65,'#e3dcc3');cardGrad.addColorStop(1,'#cfc6a4');
+  roundRectPath(ctx,cx,cy,cw,ch,cr);
+  ctx.fillStyle=cardGrad;ctx.fill();
+  ctx.lineWidth=5;ctx.strokeStyle='#b8860b';ctx.stroke();
+  ctx.save();
+  roundRectPath(ctx,cx+cw/2-85,cy+24,170,38,19);
+  const goldGrad=ctx.createLinearGradient(cx+cw/2-85,cy+24,cx+cw/2+85,cy+62);
+  goldGrad.addColorStop(0,'#fff3cf');goldGrad.addColorStop(0.3,'#f0ce72');goldGrad.addColorStop(0.6,'#c9a227');goldGrad.addColorStop(1,'#8a6a1a');
+  ctx.fillStyle=goldGrad;ctx.fill();
+  ctx.fillStyle='#3b2b06';ctx.font='bold 17px sans-serif';ctx.textAlign='center';
+  ctx.fillText('🏆 VIP PASS',cx+cw/2,cy+49);
+  ctx.restore();
+  let y=cy+100;
+  try{
+    const img=await loadImage(DB.titleImage);
+    const bannerH=140,maxW=cw-80;
+    const ratio=Math.min(maxW/img.width,bannerH/img.height);
+    const w=img.width*ratio,h=img.height*ratio;
+    ctx.drawImage(img,cx+(cw-w)/2,y,w,h);
+    y+=h+24;
+  }catch(e){
+    ctx.fillStyle='#3b2b06';ctx.font='bold 28px sans-serif';ctx.textAlign='center';
+    ctx.fillText('THE MINECRAFT REPRISAL',cx+cw/2,y+40);
+    y+=80;
+  }
+  ctx.fillStyle='#3b2b06';ctx.font='bold 26px sans-serif';ctx.textAlign='center';
+  ctx.fillText('🎫 Digital Ticket',cx+cw/2,y+10);
+  y+=55;
+  const lines=[['Ticket ID',t.id],['Name',t.name],['Format',t.format],['Seat',t.seat],['Estimated Price','₹'+t.price]];
+  lines.forEach(([label,val])=>{
+    ctx.textAlign='left';
+    ctx.fillStyle='#7a6f4e';ctx.font='18px sans-serif';ctx.fillText(label,cx+40,y);
+    ctx.textAlign='right';
+    ctx.fillStyle='#8a6a1a';ctx.font='bold 22px sans-serif';
+    ctx.fillText(String(val),cx+cw-40,y);
+    ctx.strokeStyle='rgba(138,106,26,.3)';ctx.setLineDash([4,4]);ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(cx+40,y+14);ctx.lineTo(cx+cw-40,y+14);ctx.stroke();
+    ctx.setLineDash([]);
+    y+=48;
+  });
+  y+=10;
+  ctx.fillStyle='#eee4c8';
+  ctx.beginPath();ctx.arc(cx,y,16,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(cx+cw,y,16,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='rgba(138,106,26,.45)';ctx.setLineDash([8,6]);ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(cx,y);ctx.lineTo(cx+cw,y);ctx.stroke();
+  ctx.setLineDash([]);
+  y+=34;
+  const barH=80;
+  const widths=barcodeWidths(t.id,50);
+  const totalW=widths.reduce((a,w)=>a+w+3,0)-3;
+  let bx=cx+(cw-totalW)/2;
+  ctx.fillStyle='#8a6a1a';
+  widths.forEach(w=>{ ctx.fillRect(bx,y,w,barH); bx+=w+3; });
+  y+=barH+30;
+  ctx.fillStyle='#7a6f4e';ctx.font='15px sans-serif';ctx.textAlign='center';
+  ctx.fillText('Present this ticket at the venue',cx+cw/2,y);
+  canvas.toBlob(async (blob)=>{
+    if(!blob) return;
+    try{
+      if(window.claude){
+        const downloads=await window.claude.use('downloads');
+        if(downloads){ await downloads.save({filename:'ticket-'+t.id+'.png', data:blob}); return; }
+      }
+    }catch(e){}
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download='ticket-'+t.id+'.png';document.body.appendChild(a);a.click();document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  },'image/png');
+}
+function loadImage(src){
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    img.onload=()=>resolve(img);
+    img.onerror=reject;
+    img.src=src;
+  });
+}
+function initApp(){
+  const params=new URLSearchParams(window.location.search);
+  if(params.get('viewTicket')==='1'){
+    S.viewTicket={id:params.get('id')||'',name:params.get('name')||'',format:params.get('format')||'',seat:params.get('seat')||'General',price:params.get('price')||''};
+  } else {
+    try{
+      const saved=JSON.parse(localStorage.getItem('mcr_user')||'null');
+      if(saved && saved.email){ S.name=saved.name; S.email=saved.email; S.step='format'; }
+    }catch(e){}
+  }
+  render();
+}
+initApp();
+</script>
+</body>
+</html>
